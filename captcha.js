@@ -31,9 +31,9 @@
     function validateCaptcha() {
       event.preventDefault();
       
-      
+      getFeatures();
       if (document.getElementById("cpatchaTextBox").value == code) {
-        getFeatures();
+        
         alert("Valid Captcha");
       }else{
         alert("Invalid Captcha. try Again");
@@ -120,7 +120,7 @@
             if(!e.shiftKey){
               pt1 = (new Date).getTime();
               var keycode = e.keyCode;
-              console.log(t0);
+              console.log("yes : " + e.keyCode);
               var seekTotal = pt1-t0;
               var startTime = pt1;
               skt[keycode] = seekTotal;
@@ -134,7 +134,7 @@
     var arr;
     $('#cpatchaTextBox').keyup(e=>{
       var ut = (new Date).getTime();
-      if(!e.shiftKey){
+      if(!e.shiftKey && e.keyCode!=8){
         var keycode = e.keyCode;
         if(wfk[keycode] === 1){
           var pressTime = ut - sti[keycode];
@@ -164,16 +164,17 @@
       }
       for(var i in this.stack){
         var arr = this.stack[i];
-        var keyCode = arr[0];
-        var seekTime = arr[1];
-        var pressTime = arr[2];
-        var prevKeyCode = arr[3];
-        histStackObject[keyCode][0].push(seekTime);
-        if(prevKeyCode != 0 && keyCodesObj[prevKeyCode]){
-          histStackObject[prevKeyCode][2].push(seekTime);
-        }
-        histStackObject[keyCode][1].push(pressTime);
-           
+          if(keyCodesObj[arr[0]]){
+          var keyCode = arr[0];
+          var seekTime = arr[1];
+          var pressTime = arr[2];
+          var prevKeyCode = arr[3];
+          histStackObject[keyCode][0].push(seekTime);
+          if(prevKeyCode != 0 && keyCodesObj[prevKeyCode]){
+            histStackObject[prevKeyCode][2].push(seekTime);
+          }
+          histStackObject[keyCode][1].push(pressTime); 
+        }  
       }
       return histStackObject;
     }
