@@ -134,7 +134,7 @@
     var arr;
     $('#cpatchaTextBox').keyup(e=>{
       var ut = (new Date).getTime();
-      if(!e.shiftKey && e.keyCode!=8){
+      if(!e.shiftKey){
         var keycode = e.keyCode;
         if(wfk[keycode] === 1){
           var pressTime = ut - sti[keycode];
