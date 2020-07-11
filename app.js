@@ -89,7 +89,7 @@ app.post("/keystrokeAnalysis", isloggedin, function (req, res) {
           service: 'gmail',
           auth: {
                user: 'gouravagg77@gmail.com',
-               pass: 'Plmnko098,'
+               pass: '*********'
           }
      });
 
