@@ -7,7 +7,7 @@
       document.getElementById('captcha').innerHTML = "";
       var charsArray =
       "0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ@!#$%^&*";
-      var lengthOtp = 60;
+      var lengthOtp = 50;
       var captcha = [];
       for (var i = 0; i < lengthOtp; i++) {
         //below code will not allow Repetition of Characters
