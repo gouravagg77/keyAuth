@@ -7,18 +7,17 @@
       document.getElementById('captcha').innerHTML = "";
       var charsArray =
       "0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ@!#$%^&*";
-      var lengthOtp = 200;
+      var lengthOtp = 60;
       var captcha = [];
       for (var i = 0; i < lengthOtp; i++) {
         //below code will not allow Repetition of Characters
         var index = Math.floor(Math.random() * charsArray.length + 1); //get the next character from the array
-        if (captcha.indexOf(charsArray[index]) == -1)
-          captcha.push(charsArray[index]);
-        else i--;
+        captcha.push(charsArray[index]);
+        
       }
       var canv = document.createElement("canvas");
       canv.id = "captcha";
-      canv.width = 3000;
+      canv.width = 9000;
       canv.height = 50;
       var ctx = canv.getContext("2d");
       ctx.font = "25px Georgia";
@@ -85,6 +84,10 @@
         obj.arr[i][4] = seekSd;
         obj.arr[i][5] = pressSd;
         obj.arr[i][6] = postSd;
+        if(obj.arr[i][0]!=0){
+          console.log('yesd' + i);
+          console.log(obj.arr[i]);
+       }
       }
     }
     //--------------------------------------------------------------------------------------------------------------
@@ -117,7 +120,7 @@
 
     //keydown function
     $('#cpatchaTextBox').keydown(e=>{
-            if(!e.shiftKey){
+            if(e.keyCode!=16){
               pt1 = (new Date).getTime();
               var keycode = e.keyCode;
               console.log("yes : " + e.keyCode);
@@ -134,7 +137,7 @@
     var arr;
     $('#cpatchaTextBox').keyup(e=>{
       var ut = (new Date).getTime();
-      if(!e.shiftKey){
+      if(e.keyCode!=16){
         var keycode = e.keyCode;
         if(wfk[keycode] === 1){
           var pressTime = ut - sti[keycode];
