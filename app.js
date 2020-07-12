@@ -9,7 +9,7 @@ var express = require("express"),
      passport = require("passport"),
      localstrategy = require("passport-local"),
      flash = require("connect-flash"),
-     user = require("./models/user"),
+     User = require("./models/user"),
      nodemailer = require("nodemailer"),
      schedule = require("node-schedule");
 
@@ -36,9 +36,9 @@ app.use(require("express-session")({
 
 app.use(passport.initialize());
 app.use(passport.session());
-passport.use(new localstrategy(user.authenticate()));
-passport.serializeUser(user.serializeUser());
-passport.deserializeUser(user.deserializeUser());
+passport.use(new localstrategy(User.authenticate()));
+passport.serializeUser(User.serializeUser());
+passport.deserializeUser(User.deserializeUser());
 
 app.use(function (req, res, next) {
      res.locals.currentUser = req.user;
@@ -51,58 +51,51 @@ app.get("/", function (req, res) {
      res.render("landing");
 });
 
-app.get("/keystrokeAnalysis", isloggedin, function (req, res) {
-     console.log((new Date() - req.user.enrolledAt) / (1000 * 60 * 60 * 24));
-     if (req.user.sessionNumber === 1 || (new Date() - req.user.enrolledAt) / (1000 * 60 * 60 * 24) >= 1)
-          res.render("index");
-     else {
-          let time = new Date(req.user.enrolledAt.getTime() + 60 * 60 * 24 * 1000);
-          res.send(`Try after ${time} hours`);
-     }
+app.get("/keystrokeAnalysis" ,isloggedin, function(req,res){
+     res.render("index");
 });
 
 app.post("/keystrokeAnalysis", isloggedin, function (req, res) {
      const sessionNumber = req.user.sessionNumber;
-     user.findByIdAndUpdate(req.user._id, { enrolledAt: new Date(), sessionNumber: sessionNumber + 1 }, (err) => {
-          if (err) {
-               console.log(err);
-          }
-          else {
-               console.log("success");
-          }
+     User.findByIdAndUpdate(req.user._id, { enrolledAt: new Date(), sessionNumber: sessionNumber + 1 }, (err) => {
+	      if (err) {
+	           console.log(err);
+	      }
+	      else {
+	           console.log("success");
+	      }
      });
 
-     console.log("abs");
-     var id = req.user.email;
-     console.log(id);
-     res.send("successfull");
-     let date = new Date(new Date().getTime() + 60 * 60 * 24 * 1000);
+    console.log("abs");
+    var id = req.user.email;
+    console.log(id);
+    res.send("successfull");
+    let date = new Date(new Date().getTime() + 60 * 60 * 24 * 1000);
      //let date = new Date(2020,6,10,14,22);
 
-     let mailOptions = {
-          from: 'gouravagg77@gmail.com',
-          to: id,
-          subject: 'Email',
-          text: 'some content'
-     };
-     let transporter = nodemailer.createTransport({
-          service: 'gmail',
-          auth: {
-               user: 'gouravagg77@gmail.com',
-               pass: 'Plmnko098,'
-          }
-     });
+	var smtpTransport = nodemailer.createTransport({
+		service: 'Gmail' ,
+		auth: {
+			user: "dishask99@gmail.com",
+			pass: PASSWORD
+		}
+	});
+	var mailOptions = {
+		to: req.user.email,
+		from: "dishask99@gmail.com",
+		subject: "Registration Successful",
+		text: "hello :) <3"
+	};
 
-     var j = schedule.scheduleJob(date, function () {
-          transporter.sendMail(mailOptions,
-               function (error, info) {
-                    if (error) {
-                         console.log(error);
-                    } else {
-                         console.log("email send");
-                    }
-               });
-     });
+ 	var j = schedule.scheduleJob(date, function () {
+      	transporter.sendMail(mailOptions,function (error, info) {
+            if (error) {
+                 console.log(error);
+            } else {
+                 console.log("email send");
+            }
+        });
+ 	});
 });
 
 // AUTHENTICATION ROUTES
@@ -114,16 +107,38 @@ app.get("/register", function (req, res) {
 
 app.post("/register", function (req, res) {
      //console.log(req.body);
-     var newUser = new user({ username: req.body.username, email: req.body.email, enrolledAt: new Date(), sessionNumber: 1 });
-     user.register(newUser, req.body.password, function (err, user) {
+     var newUser = new User({ username: req.body.username, email: req.body.email, enrolledAt: new Date(), sessionNumber: 1 });
+     User.register(newUser, req.body.password, function (err, user) {
           if (err) {
                console.log(err);
                return res.render("register");
-          }
-          passport.authenticate("local")(req, res, function () {
-               res.redirect("/keystrokeAnalysis");
-          });
+          }else{
+            passport.authenticate("local")(req, res, function () {
+		        var smtpTransport = nodemailer.createTransport({
+					service: 'Gmail' ,
+					auth: {
+						user: "dishask99@gmail.com",
+						pass: PASSWORD
+					}
+				});
+				var mailOptions = {
+					to: req.user.email,
+					from: "dishask99@gmail.com",
+					subject: "Registration Successful",
+					text: "hello :) <3"
+				};
+				smtpTransport.sendMail(mailOptions,function(err){
+					if(!err){
+						res.redirect("/keystrokeAnalysis");
+					}else{
+						console.log("Mail sent unsuccesful for user_id"+req.user._id);
+						res.redirect("/register");
+					}
+				});
+            });
+        }
      });
+
 });
 
 //LOGIN ROUTE
@@ -157,3 +172,43 @@ function isloggedin(req, res, next) {
 app.listen(port, hostname, function () {
      console.log(`Server running at http://${hostname}:${port}/`);
 });
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

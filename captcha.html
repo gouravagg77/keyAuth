@@ -4,7 +4,7 @@
 	<title>captcha</title>
 	<link rel="stylesheet" type="text/css" href="captcha.css">
 </head>
-<body onload="createCaptcha()">
+<body onload="createCaptcha()" action="/keystrokeAnalysis" method="post">
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
   <form onsubmit="validateCaptcha()">
     <div id="captcha">
