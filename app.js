@@ -51,20 +51,8 @@ app.get("/", function (req, res) {
      res.render("landing");
 });
 
-app.get("/keystrokeAnalysis", isloggedin, function (req, res) {
-     console.log((new Date() - req.user.enrolledAt) / (1000 * 60 * 60 * 24));
-     console.log(req.user);
-     if ((req.user.sessionNumber<=3 && (new Date() - req.user.enrolledAt) / (1000 * 60 * 60 * 24) >= 1) || req.user.sessionNumber===1){
-          res.render("index");
-     }
-     else {
-     	if(req.user.sessionNumber==4){
-     		res.send('Thanks for contributing, you have completed your enrollment process');
-     	}else{
-          let time = new Date(req.user.enrolledAt.getTime() + 60 * 60 * 24 * 1000);
-          res.send('Try after '+time+ ' hours');
-        }
-     }
+app.get("/keystrokeAnalysis" ,isloggedin, function(req,res){
+     res.render("index");
 });
 
 app.post("/keystrokeAnalysis", isloggedin, function (req, res) {
@@ -90,7 +78,7 @@ app.post("/keystrokeAnalysis", isloggedin, function (req, res) {
 		auth: {
 			user: "dishask99@gmail.com",
 			pass: PASSWORD
-		}	
+		}
 	});
 	var mailOptions = {
 		to: req.user.email,
@@ -131,7 +119,7 @@ app.post("/register", function (req, res) {
 					auth: {
 						user: "dishask99@gmail.com",
 						pass: PASSWORD
-					}	
+					}
 				});
 				var mailOptions = {
 					to: req.user.email,
@@ -141,7 +129,7 @@ app.post("/register", function (req, res) {
 				};
 				smtpTransport.sendMail(mailOptions,function(err){
 					if(!err){
-						res.redirect("/keystrokeAnalysis");	
+						res.redirect("/keystrokeAnalysis");
 					}else{
 						console.log("Mail sent unsuccesful for user_id"+req.user._id);
 						res.redirect("/register");
@@ -150,7 +138,7 @@ app.post("/register", function (req, res) {
             });
         }
      });
-     	
+
 });
 
 //LOGIN ROUTE
