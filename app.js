@@ -90,7 +90,7 @@ app.post("/keystrokeAnalysis", isloggedin, function (req, res) {
 		service: 'Gmail' ,
 		auth: {
 			user: "dishask99@gmail.com",
-			pass: "sangopdis@1"
+			pass: PASSWORD
 		}
 	});
 	var mailOptions = {
@@ -131,7 +131,7 @@ app.post("/register", function (req, res) {
 					service: 'Gmail' ,
 					auth: {
 						user: "dishask99@gmail.com",
-						pass: "sangopdis@1"
+						pass: PASSWORD
 					}
 				});
 				var mailOptions = {
