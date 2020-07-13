@@ -1,37 +1,52 @@
 <!DOCTYPE html>
 <html>
+
 <head>
-    <title>Dummy Site</title>
-    <!--<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.0.0-beta.2/css/bootstrap.min.css" >-->
-    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css">
-    <link rel="stylesheet" href="/main.css">
+  <title>Dummy Site</title>
+  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css">
+  <link rel="stylesheet" href="/main.css">
+  <link href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet" integrity="sha384-wvfXpqpZZVQGK6TAh5PVlGOfQNHSoD2xbE+QkPxCAFlNEevoEH3Sl0sibVcOQVnN" crossorigin="anonymous">
 </head>
-<body>
- <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
-  <a class="navbar-brand" href="#">HOME</a>
-  <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
-    <span class="navbar-toggler-icon"></span>
-  </button>
 
-  <div class="collapse navbar-collapse justify-content-end" id="navbarNavAltMarkup">
-    <div class=" navbar-nav">
-      
-        <% if(!currentUser){ %>
-        <li class="nav-item">  
-           <a class="nav-link" href="/login">Login</a>
-        </li>
-        <li class="nav-item">
-        <a class="nav-link " href="/register">Sign Up</a>
-        </li>
-       <% }else{ %>
-          <li class="nav-item nav-link ">Signed in as <%= currentUser.username %> </li>
-          <li class="nav-item">
-         <a class="nav-link " href="/logout">Logout</a>
-         </li>
-       <% } %>
+<body onload="createCaptcha()">
+  <nav class="navbar navbar-expand-lg navbar-light bg-light">
+    <div class="container-fluid">
+      <a class="navbar-brand" href="/">KeyAuth</a>
+      <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent"
+        aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+
+      <div class="collapse navbar-collapse" id="navbarSupportedContent">
+
+        <ul class="navbar-nav ml-auto">
+          <li class="nav-item
+                <%= typeof page !== 'undefined' && page === '/' ? 'active' : '' %>"><a class="nav-link"
+              href="/">Home</a></li>
+          <% if (!currentUser) { %>
+          <li class=" nav-item <%= typeof page !== 'undefined' && page === 'login' ? 'active' : '' %>"><a
+              class="nav-link" href="/login"><i class="fa fa-sign-in"></i>Login</a></li>
+          <li class="nav-item <%= typeof page !== 'undefined' && page === 'register' ? 'active' : '' %>"><a
+              class="nav-link" href="/register"><i class="fa fa-user-plus"></i>Sign Up</a></li>
+          <% } else { %>
+          <li class=" nav-item"><a class="nav-link" href="/">Hello, <%= currentUser.username %></a></li>
+          <li class=" nav-item"><a class="nav-link" href="/logout"><i class="fa fa-sign-out"></i>Logout</a></li>
+          <% } %>
+        </ul>
+      </div>
+    </div>
+  </nav>
+
+  <div class="container">
+    <% if(error && error.length>0) { %>
+    <div class="alert alert-danger" role="alert">
+      <%= error %>
+    </div>
+    <% } %>
+    <% if(success && success.length>0) { %>
+    <div class="alert alert-success" role="alert">
+      <%= success %>
+    </div>
+    <% } %>
   </div>
-</div>
-</nav>
-
-
-
+  <div class="container"> 

@@ -6,7 +6,7 @@
       //clear the contents of captcha div first 
       document.getElementById('captcha').innerHTML = "";
       var charsArray = "0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ@!#$%^&*";
-      var lengthOtp = 1;
+      var lengthOtp = 4;
       var captcha = [];
       for (var i = 0; i < lengthOtp; i++) {
         //below code will not allow Repetition of Characters
@@ -31,21 +31,33 @@
     form.addEventListener("submit", validateCaptcha);
 
 // Add the event paramater to the function
-    
+    var user= "gourav"
+
     function validateCaptcha() {
       event.preventDefault();
-      var x = getFeatures();
-      console.log(x);
-      document.getElementById('textArea').innerHTML = x;
-      if (document.getElementById("cpatchaTextBox").value == code) {
-        console.log("ads");
-        //alert("Valid Captcha");
-        form.submit();
-      }else{
-        console.log("addds");
-         //alert("Invalid Captcha. try Again");
-        createCaptcha();
+       //var x = getFeatures();
       
+       console.log("x",user);
+      //document.getElementById('textArea').innerHTML = x;
+      if (document.getElementById("cpatchaTextBox").value == code) {
+        //console.log("ads");
+        var proxyUrl = 'https://cors-anywhere.herokuapp.com/';
+        fetch(proxyUrl+"http://localhost:3000/keystrokeAnalysis",{
+        method: "POST",
+        headers: {
+          'Accept': 'application/json',
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(user)
+      }).then(response => {
+        return response.json();
+      }).then(data => {
+        console.log("GFD", data);
+      })
+      form.submit();
+      }else{
+        //console.log("addds");
+        createCaptcha();
       }
     }
 
@@ -100,9 +112,7 @@
         stringFeatures = stringFeatures + ",," + result;
       }
       return stringFeatures;
-      
     }
-
     //--------------------------------------------------------------------------------------------------------------
 
     //initializing required variables

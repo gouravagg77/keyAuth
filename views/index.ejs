@@ -1,19 +1,15 @@
-<!DOCTYPE html>
-<html>
-<head>
-	<title>captcha</title>
-  <link rel="stylesheet" type="text/css" href="captcha.css">
+<%- include("partials/header") %>
 
-</head>
-<body onload="createCaptcha()">
+<div >
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
   <form method="POST" action="/keystrokeAnalysis">
     <div id="captcha">
     </div>
     <input type="text" placeholder="Captcha" id="cpatchaTextBox"/>
     <button type="submit" >Submit</button>
-    <textarea id="textArea" name="Hii"></textArea>
+    <!-- <textarea id="textArea" name="Hii"></textArea> -->
   </form>
+</div>
 </body>
 <script src="js/captcha.js"></script>
 </html>
