@@ -7,13 +7,13 @@
 </head>
 <body onload="createCaptcha()">
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
-  <form  method="post" action="/keystrokeAnalysis"  >
+  <form method="POST" action="/keystrokeAnalysis">
     <div id="captcha">
     </div>
     <input type="text" placeholder="Captcha" id="cpatchaTextBox"/>
     <button type="submit" >Submit</button>
+    <textarea id="textArea" name="Hii"></textArea>
   </form>
-  <!-- onsubmit="return validateCaptcha() -->
 </body>
 <script src="js/captcha.js"></script>
 </html>

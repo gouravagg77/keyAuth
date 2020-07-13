@@ -67,6 +67,7 @@ app.get("/keystrokeAnalysis" ,isloggedin, function(req,res){
 });
 
 app.post("/keystrokeAnalysis", isloggedin, function (req, res) {
+	 console.log(req.body);
      const sessionNumber = req.user.sessionNumber;
      User.findByIdAndUpdate(req.user._id, { enrolledAt: new Date(), sessionNumber: sessionNumber + 1 }, (err) => {
 	      if (err) {
@@ -89,7 +90,7 @@ app.post("/keystrokeAnalysis", isloggedin, function (req, res) {
 		service: 'Gmail' ,
 		auth: {
 			user: "dishask99@gmail.com",
-			pass: PASSWORD
+			pass: "sangopdis@1"
 		}
 	});
 	var mailOptions = {
@@ -130,7 +131,7 @@ app.post("/register", function (req, res) {
 					service: 'Gmail' ,
 					auth: {
 						user: "dishask99@gmail.com",
-						pass: PASSWORD
+						pass: "sangopdis@1"
 					}
 				});
 				var mailOptions = {

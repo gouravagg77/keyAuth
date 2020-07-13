@@ -1,6 +1,7 @@
     //Captcha Code
     //--------------------------------------------------------------------------------------------------------------------------
     var code;
+
     function createCaptcha() {
       //clear the contents of captcha div first 
       document.getElementById('captcha').innerHTML = "";
@@ -10,9 +11,9 @@
       for (var i = 0; i < lengthOtp; i++) {
         //below code will not allow Repetition of Characters
         var index = Math.floor(Math.random() * charsArray.length + 1); //get the next character from the array
-        if (captcha.indexOf(charsArray[index]) == -1)
-          captcha.push(charsArray[index]);
-        else i--;
+        //if (captcha.indexOf(charsArray[index]) == -1)
+        captcha.push(charsArray[index]);
+        //else i--;
       }
 
       var canv = document.createElement("canvas");
@@ -26,20 +27,25 @@
       code = captcha.join("");
       document.getElementById("captcha").appendChild(canv); // adds the canvas to the body element
     }
+    var form = document.querySelector('form');
+    form.addEventListener("submit", validateCaptcha);
 
+// Add the event paramater to the function
+    
     function validateCaptcha() {
       event.preventDefault();
-      
-      getFeatures();
+      var x = getFeatures();
+      console.log(x);
+      document.getElementById('textArea').innerHTML = x;
       if (document.getElementById("cpatchaTextBox").value == code) {
         console.log("ads");
         //alert("Valid Captcha");
-      return true;
+        form.submit();
       }else{
         console.log("addds");
          //alert("Invalid Captcha. try Again");
         createCaptcha();
-       return false;
+      
       }
     }
 
@@ -61,6 +67,7 @@
       var seekToPressRatio = round((1-pressRatio)/pressRatio,4);
       var pressSdToPressRatio = round((pressHistSd+z)/(pressHistMean+z),4);
       var seekSdToPressRatio = round(((seekHistSd+z)/(pressHistMean+z)),4);
+      var stringFeatures = "";
       for(var i in obj.arr) {
         var rev = obj.arr[i][1].length;
         var seekMean = 0;
@@ -88,7 +95,12 @@
         obj.arr[i][4] = seekSd;
         obj.arr[i][5] = pressSd;
         obj.arr[i][6] = postSd;
+        var result = obj.arr[i].toString();
+        console.log(result);
+        stringFeatures = stringFeatures + ",," + result;
       }
+      return stringFeatures;
+      
     }
 
     //--------------------------------------------------------------------------------------------------------------
@@ -119,7 +131,7 @@
       
     //keydown function
     $('#cpatchaTextBox').keydown(e=>{
-            if(!e.shiftKey){
+            if(e.keyCode!=16){
               pt1 = (new Date).getTime();
               var keycode = e.keyCode;
               console.log("yes : " + e.keyCode);
@@ -135,7 +147,7 @@
     var arr;
     $('#cpatchaTextBox').keyup(e=>{
       var ut = (new Date).getTime();
-      if(!e.shiftKey){
+      if(e.keyCode!=16){
         var keycode = e.keyCode;
         if(wfk[keycode] === 1){
           var pressTime = ut - sti[keycode];
