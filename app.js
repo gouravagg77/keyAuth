@@ -53,7 +53,7 @@ app.get("/", function (req, res) {
 
 app.get("/keystrokeAnalysis" ,isloggedin, function(req,res){
 	console.log((new Date()-req.user.enrolledAt)/(1000*60*60*24));
-	if((req.user.sessionNumber===1) || (req.user.sessionNumber<=3 && (new Date() - req.user.enrolledAt))/(1000*60)>=1)
+	if((req.user.sessionNumber===1) || (req.user.sessionNumber<=3 && (new Date() - req.user.enrolledAt))/(1000*60*60*24)>=1)
     	res.render("index");
     else{
     	if(req.user.sessionNumber==4){
