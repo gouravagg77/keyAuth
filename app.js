@@ -52,7 +52,18 @@ app.get("/", function (req, res) {
 });
 
 app.get("/keystrokeAnalysis" ,isloggedin, function(req,res){
-     res.render("index");
+	console.log((new Date()-req.user.enrolledAt)/(1000*60*60*24));
+	if((req.user.sessionNumber===1) || (req.user.sessionNumber<=3 && (new Date() - req.user.enrolledAt))/(1000*60)>=1)
+    	res.render("index");
+    else{
+    	if(req.user.sessionNumber==4){
+    		res.send('Thanks for contributing you have completed the enrollment process :)');
+    	}else{
+    		let time = new Date(req.user.enrolledAt.getTime() + 60*60*24*1000);
+    		res.send('Try after '+time+' hours');
+    	}
+
+    }
 });
 
 app.post("/keystrokeAnalysis", isloggedin, function (req, res) {
@@ -72,8 +83,9 @@ app.post("/keystrokeAnalysis", isloggedin, function (req, res) {
     res.send("successfull");
     let date = new Date(new Date().getTime() + 60 * 60 * 24 * 1000);
      //let date = new Date(2020,6,10,14,22);
-
-	var smtpTransport = nodemailer.createTransport({
+    /*let date = new Date();
+    date.setSeconds(date.getSeconds()+30);*/
+	var transporter = nodemailer.createTransport({
 		service: 'Gmail' ,
 		auth: {
 			user: "dishask99@gmail.com",
