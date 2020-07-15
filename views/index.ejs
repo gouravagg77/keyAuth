@@ -1,15 +1,19 @@
 <%- include("partials/header") %>
 
-<div >
-<script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
+<div>
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
+  <h1 id="heading"> Session 1</h1>
   <form method="POST" action="/keystrokeAnalysis">
     <div id="captcha">
     </div>
-    <input type="text" placeholder="Captcha" id="cpatchaTextBox"/>
-    <button type="submit" >Submit</button>
+    <div class="form-group">
+      <input type="text" class="form-control" placeholder="Captcha" id="cpatchaTextBox" />
+    </div>
+    <button type="submit" class="btn btn-primary">Submit</button>
     <!-- <textarea id="textArea" name="Hii"></textArea> -->
   </form>
 </div>
 </body>
 <script src="js/captcha.js"></script>
+
 </html>

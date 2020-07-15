@@ -1,12 +1,12 @@
 //Captcha Code
 //--------------------------------------------------------------------------------------------------------------------------
 var code;
-
+var stringNo = 1;
 function createCaptcha() {
   //clear the contents of captcha div first 
   document.getElementById('captcha').innerHTML = "";
   var charsArray = "0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ@!#$%^&*";
-  var lengthOtp = 4;
+  var lengthOtp = 5;
   var captcha = [];
   for (var i = 0; i < lengthOtp; i++) {
     //below code will not allow Repetition of Characters
@@ -29,13 +29,18 @@ function createCaptcha() {
 }
 
 var form = document.querySelector('form');
+var stringEnter = document.querySelector('h1');
+
 form.addEventListener("submit", validateCaptcha);
 
 // Add the event paramater to the function
-function validateCaptcha() {
+function validateCaptcha(event) {
   event.preventDefault();
 
   if (document.getElementById("cpatchaTextBox").value == code) {
+    console.log("object", history);
+    const data = getFeatures();
+
     (async () => {
       const rawResponse = await fetch("http://localhost:3000/store", {
         method: 'POST',
@@ -43,20 +48,43 @@ function validateCaptcha() {
           'Accept': 'application/json',
           'Content-Type': 'application/json'
         },
-        body: JSON.stringify({ a:[1,2,3,4,5,6,7] })
+        body: JSON.stringify(data)
       });
       const content = await rawResponse.json();
 
       console.log(content);
-      
     })();
-    form.submit();
+
+    if(stringNo === 3){
+      form.submit();
+    }
+    stringNo = stringNo + 1;
+    stringEnter.innerHTML = "Session " + stringNo;
+    document.getElementById("cpatchaTextBox").value ="";
+
+    if (stringNo <= 3) {
+      reset();
+      createCaptcha();
+    } else {
+      form.submit();
+    }
   } else {
+    reset();
     createCaptcha();
   }
 }
 
+function reset() {
+  pt1 = (new Date).getTime();
+  wfk = [];
+  skt = [];
+  sti = [];
+  history.stack=[];
+}
+
 function getFeatures() {
+  var obj=[];
+  var j=0;
   var obj = {};
   obj.arr = history.get();
   obj.seekArr = history.get_seek();
@@ -74,7 +102,7 @@ function getFeatures() {
   var seekToPressRatio = round((1 - pressRatio) / pressRatio, 4);
   var pressSdToPressRatio = round((pressHistSd + z) / (pressHistMean + z), 4);
   var seekSdToPressRatio = round(((seekHistSd + z) / (pressHistMean + z)), 4);
-  var stringFeatures = "";
+
   for (var i in obj.arr) {
     var rev = obj.arr[i][1].length;
     var seekMean = 0;
@@ -102,12 +130,10 @@ function getFeatures() {
     obj.arr[i][4] = seekSd;
     obj.arr[i][5] = pressSd;
     obj.arr[i][6] = postSd;
-    var result = obj.arr[i].toString();
-    console.log(result);
-    stringFeatures = stringFeatures + ",," + result;
   }
-  return stringFeatures;
+  return obj;
 }
+
 //--------------------------------------------------------------------------------------------------------------
 
 //initializing required variables
@@ -190,6 +216,7 @@ history.get = function () {
       histStackObject[keyCode][1].push(pressTime);
     }
   }
+
   return histStackObject;
 }
 
@@ -197,6 +224,7 @@ history.add = function (arr) {
   this.stack.push(arr);
   this.get();
 }
+
 history.get_seek = function () {
   var seekArr = [];
   for (i in this.stack) {
@@ -204,6 +232,7 @@ history.get_seek = function () {
   }
   return seekArr;
 }
+
 history.get_press = function () {
   var pressArr = [];
   for (i in this.stack) {
