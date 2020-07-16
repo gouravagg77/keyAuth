@@ -81,7 +81,7 @@ app.get("/keystrokeAnalysis", isloggedin, function (req, res) {
           });
           res.send("an email has been sent please verify first")
      } else {
-          if ((req.user.sessionNumber === 1) || (req.user.sessionNumber <= 3 && (new Date() - req.user.enrolledAt)) / (1000 * 60 * 60 * 24) >= 1) { res.render("index"); }
+          if ((req.user.sessionNumber === 1) || (req.user.sessionNumber <= 3 && (new Date() - req.user.enrolledAt)) / (1000 * 60 * 60 * 24) >= 1) { res.render("index", { page: "keystroke" }); }
           else {
                if (req.user.sessionNumber == 4) {
                     res.send('Thanks for contributing you have completed the enrollment process :)');
